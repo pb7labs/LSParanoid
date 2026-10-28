@@ -26,8 +26,21 @@ pluginManagement {
 Now you can just annotate classes with strings that need to be obfuscated with `@Obfuscate`.
 After you project compiles every string in annotated classes will be obfuscated.
 
-**Note that you should use at least Java 17 to launch the gradle daemon for this plugin (this is also required by AGP 8+).**
+**Note that you should use at least Java 17 to launch the Gradle daemon for this plugin (this is also required by AGP 8+).**
 The project that uses this plugin on the other hand does not necessarily to target Java 17.
+
+Compatibility
+-------------
+
+LSParanoid supports Android Gradle Plugin 9+ with Gradle 9+ and Java 17. It uses the
+Android Components and Scoped Artifacts APIs, and works with Kotlin and KSP projects
+without changing their source-generation pipeline.
+
+For AGP 9.0.1 with Kotlin 2.3.21, add the following to `gradle.properties`:
+
+```properties
+android.builtInKotlin=false
+```
 
 Configuration
 -------------
@@ -121,12 +134,13 @@ public class MainActivity extends AppCompatActivity {
 
 Credit
 ------
-LSParanoid was forked from https://github.com/MichaelRocks/paranoid. Credits to its original author Michael Rozumyanskiy.
+LSParanoid was forked from https://github.com/MichaelRocks/paranoid. Credits to its original author Michael Rozumyanskiy. Updated and maintained by Pulkit Bhanot based on https://github.com/LSPosed/LSParanoid.
 
 License
 =======
     Copyright 2021 Michael Rozumyanskiy
     Copyright 2023 LSPosed
+    Copyright 2026 Pulkit Bhanot
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

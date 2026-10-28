@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 
 plugins {
@@ -19,9 +19,11 @@ allprojects {
         }
     }
 
-    plugins.withType(KotlinBasePlugin::class.java) {
+    // AGP 9 applies KotlinBasePlugin for built-in Kotlin but does not create a
+    // KotlinJvmProjectExtension. Configure only the JVM modules in this build.
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
         extensions.configure(KotlinJvmProjectExtension::class.java) {
-            jvmToolchain(17)
+            compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 }

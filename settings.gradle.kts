@@ -1,6 +1,14 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+    val requestedAgpVersion = providers.gradleProperty("agpVersion").orElse("9.0.1")
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id.startsWith("com.android.")) {
+                useVersion(requestedAgpVersion.get())
+            }
+        }
+    }
     repositories {
         gradlePluginPortal()
         google()

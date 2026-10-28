@@ -20,7 +20,6 @@ package org.lsposed.lsparanoid.plugin
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts.Scope
-import com.android.build.gradle.api.AndroidBasePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -31,28 +30,10 @@ import java.security.SecureRandom
 class LSParanoidPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create("lsparanoid", LSParanoidExtension::class.java)
-        project.plugins.withType(AndroidBasePlugin::class.java) { _ ->
-            val components = project.extensions.getByType(AndroidComponentsExtension::class.java)
-            components.onVariants { variant ->
-                if (!extension.variantFilter(variant)) return@onVariants
-                val task = project.tasks.register(
-                    "lsparanoid${variant.name.replaceFirstChar { it.uppercase() }}", LSParanoidTask::class.java
-                ) {
-                    it.bootClasspath.set(components.sdkComponents.bootClasspath)
-                    it.classpath = variant.compileClasspath
-                    it.seed.set(extension.seed ?: SecureRandom().nextInt())
-                    it.classFilter = extension.classFilter
-                    it.projectName.set("${project.rootProject.name}\$${project.path}")
-                }
-                variant.artifacts.forScope(if (extension.includeDependencies) Scope.ALL else Scope.PROJECT).use(task)
-                    .toTransform(
-                        ScopedArtifact.CLASSES,
-                        LSParanoidTask::jars,
-                        LSParanoidTask::dirs,
-                        LSParanoidTask::output,
-                    )
+        ANDROID_PLUGIN_IDS.forEach { androidPluginId ->
+            project.pluginManager.withPlugin(androidPluginId) {
+                project.configureAndroidComponents(extension)
             }
-            project.addDependencies()
         }
         project.tasks.withType(JavaCompile::class.java) {
             it.options.compilerArgs.add("-XDstringConcat=inline")
@@ -62,9 +43,45 @@ class LSParanoidPlugin : Plugin<Project> {
         }
     }
 
+    private fun Project.configureAndroidComponents(extension: LSParanoidExtension) {
+        // Configure only after an Android plugin ID is present. This avoids the
+        // legacy AndroidBasePlugin type removed from AGP 9 and leaves AGP's
+        // built-in Kotlin and KSP generated sources on their normal pipeline.
+        val components = extensions.getByType(AndroidComponentsExtension::class.java)
+        components.onVariants { variant ->
+            if (!extension.variantFilter(variant)) return@onVariants
+            val task = tasks.register(
+                "lsparanoid${variant.name.replaceFirstChar { it.uppercase() }}", LSParanoidTask::class.java
+            ) {
+                it.bootClasspath.set(components.sdkComponents.bootClasspath)
+                it.classpath = variant.compileClasspath
+                it.seed.set(extension.seed ?: SecureRandom().nextInt())
+                it.classFilter = extension.classFilter
+                it.projectName.set("${rootProject.name}\$${path}")
+            }
+            variant.artifacts.forScope(if (extension.includeDependencies) Scope.ALL else Scope.PROJECT).use(task)
+                .toTransform(
+                    ScopedArtifact.CLASSES,
+                    LSParanoidTask::jars,
+                    LSParanoidTask::dirs,
+                    LSParanoidTask::output,
+                )
+        }
+        addDependencies()
+    }
+
     private fun Project.addDependencies() {
         val version = Build.VERSION
         val configurationName = JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME
         dependencies.add(configurationName, "org.lsposed.lsparanoid:core:$version")
+    }
+
+    private companion object {
+        val ANDROID_PLUGIN_IDS = listOf(
+            "com.android.application",
+            "com.android.library",
+            "com.android.dynamic-feature",
+            "com.android.test",
+        )
     }
 }

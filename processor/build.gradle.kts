@@ -9,6 +9,7 @@ dependencies {
     implementation(projects.core)
     implementation(libs.grip)
     implementation(libs.asm.common)
+    testImplementation(kotlin("test"))
 }
 
 publish {
