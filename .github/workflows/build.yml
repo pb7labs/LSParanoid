@@ -16,12 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        agp: [ 9.0.1, 8.8.2 ]
+        agp: [ 9.0.1 ]
         include:
           - agp: 9.0.1
             gradle: 9.1.0
-          - agp: 8.8.2
-            gradle: 8.10.2
 
     steps:
       - name: Check out
@@ -40,7 +38,7 @@ jobs:
         run: perl -pi -e 's/gradle-[0-9.]+-bin/gradle-${{ matrix.gradle }}-bin/' gradle/wrapper/gradle-wrapper.properties
       - name: Build with Gradle
         shell: bash
-        run: ./gradlew publishToMavenLocal "-PagpVersion=${{ matrix.agp }}"
+        run: ./gradlew check publishToMavenLocal "-PagpVersion=${{ matrix.agp }}"
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}

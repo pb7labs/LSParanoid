@@ -32,5 +32,3 @@ include(
     ":processor",
     ":gradle-plugin"
 )
-
-includeBuild("samples")

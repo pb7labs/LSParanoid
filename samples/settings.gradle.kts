@@ -7,7 +7,6 @@ if (parentLocalProps.exists() && !localProps.exists()) {
 }
 
 pluginManagement {
-    includeBuild("..")
     val requestedAgpVersion = providers.gradleProperty("agpVersion").orElse("9.0.1")
     resolutionStrategy {
         eachPlugin {
@@ -17,23 +16,17 @@ pluginManagement {
         }
     }
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         google()
         mavenCentral()
     }
 }
 
-includeBuild("..") {
-    dependencySubstitution {
-        substitute(module("io.github.pb7labs:core")).using(project(":core"))
-        substitute(module("io.github.pb7labs:processor")).using(project(":processor"))
-        substitute(module("io.github.pb7labs:gradle-plugin")).using(project(":gradle-plugin"))
-    }
-}
-
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
     }
