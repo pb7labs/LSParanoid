@@ -48,7 +48,7 @@ val promoteCentralPortal by tasks.registering {
         if (username.isNullOrBlank() || password.isNullOrBlank()) {
             throw GradleException("Central Portal user-token credentials (ossrhUsername & ossrhPassword) are required to promote the deployment.")
         }
-        val targetUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/manual/upload/defaultRepository/io.github.pb7labs"
+        val targetUrl = "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/io.github.pb7labs"
         val connection = java.net.URI.create(targetUrl).toURL().openConnection() as java.net.HttpURLConnection
         connection.requestMethod = "POST"
         val auth = java.util.Base64.getEncoder().encodeToString("$username:$password".toByteArray())
