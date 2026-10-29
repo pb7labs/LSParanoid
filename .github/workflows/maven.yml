@@ -19,6 +19,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+      # Note: maven_ossrhUsername and maven_ossrhPassword MUST contain Central Portal user-token
+      # credentials generated from https://central.sonatype.com/account
       - name: Build with Gradle
         run: ./gradlew publish
         env:
@@ -27,3 +29,8 @@ jobs:
           ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.maven_ossrhUsername }}
           ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.maven_ossrhPassword }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Finalize Central Portal Staging Deployment
+        run: ./gradlew promoteCentralPortal
+        env:
+          ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.maven_ossrhUsername }}
+          ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.maven_ossrhPassword }}
