@@ -22,13 +22,12 @@ jobs:
       # Note: maven_ossrhUsername and maven_ossrhPassword MUST contain Central Portal user-token
       # credentials generated from https://central.sonatype.com/account
       - name: Build with Gradle
-        run: ./gradlew publish
+        run: ./gradlew :core:publishAllPublicationsToOssrhRepository :processor:publishAllPublicationsToOssrhRepository :gradle-plugin:publishAllPublicationsToOssrhRepository
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}
           ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.maven_ossrhUsername }}
           ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.maven_ossrhPassword }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Finalize Central Portal Staging Deployment
         run: ./gradlew promoteCentralPortal
         env:
