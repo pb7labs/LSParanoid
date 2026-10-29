@@ -10,12 +10,16 @@ on:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
+    name: AGP ${{ matrix.agp }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
+        agp: [ 9.0.1 ]
+        include:
+          - agp: 9.0.1
+            gradle: 9.1.0
 
     steps:
       - name: Check out
@@ -29,24 +33,30 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+      - name: Select tested Gradle version
+        shell: bash
+        run: perl -pi -e 's/gradle-[0-9.]+-bin/gradle-${{ matrix.gradle }}-bin/' gradle/wrapper/gradle-wrapper.properties
       - name: Build with Gradle
-        run: ./gradlew publishToMavenLocal
+        shell: bash
+        run: ./gradlew check publishToMavenLocal "-PagpVersion=${{ matrix.agp }}"
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}
       - name: Upload library
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-library
+          name: ${{ matrix.os }}-agp${{ matrix.agp }}-library
           path: ~/.m2
           include-hidden-files: true
       - name: Build samples
+        shell: bash
         run: |
-          ./gradlew :samples:application:assembleRelease :samples:application-global-obfuscate:assembleRelease :samples:library:assembleRelease :samples:library-may-obfuscate:assembleRelease :samples:library-obfuscate:assembleRelease
+          ./gradlew -p samples :application:assembleRelease :application-global-obfuscate:assembleRelease :library:assembleRelease :library-may-obfuscate:assembleRelease :library-obfuscate:assembleRelease "-PagpVersion=${{ matrix.agp }}" --configuration-cache
       - name: Upload samples
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-samples
+          name: ${{ matrix.os }}-agp${{ matrix.agp }}-samples
           path: samples/*/build/outputs
       - name: Stop Gradle
+        shell: bash
         run: ./gradlew --stop

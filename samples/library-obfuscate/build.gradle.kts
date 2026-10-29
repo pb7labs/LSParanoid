@@ -1,5 +1,5 @@
 plugins {
-    id("org.lsposed.lsparanoid")
+    id("io.github.pb7labs.lsparanoid")
     id("com.android.library")
 }
 

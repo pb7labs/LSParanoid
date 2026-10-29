@@ -9,6 +9,15 @@ plugins {
     signing
 }
 
+gradlePlugin {
+    plugins {
+        create("lsparanoid") {
+            id = "io.github.pb7labs.lsparanoid"
+            implementationClass = "org.lsposed.lsparanoid.plugin.LSParanoidPlugin"
+        }
+    }
+}
+
 
 dependencies {
     implementation(projects.core)
@@ -66,26 +75,31 @@ idea {
 }
 
 publish {
-    githubRepo = "LSPosed/LSParanoid"
-    publishPlugin("$group", rootProject.name, "org.lsposed.lsparanoid.plugin.LSParanoidPlugin") {
-        name = rootProject.name
-        description = "String obfuscator for Android applications"
-        url = "https://github.com/LSPosed/LSParanoid"
-        licenses {
-            license {
-                name = "Apache License 2.0"
-                url = "https://github.com/LSPosed/LSParanoid/blob/master/LICENSE.txt"
+    githubRepo = "pb7labs/LSParanoid"
+}
+
+publishing {
+    publications.withType<MavenPublication>().configureEach {
+        pom {
+            name.set("LSParanoid")
+            description.set("String obfuscator for Android applications")
+            url.set("https://github.com/pb7labs/LSParanoid")
+            licenses {
+                license {
+                    name.set("Apache License 2.0")
+                    url.set("https://github.com/pb7labs/LSParanoid/blob/master/LICENSE.txt")
+                }
             }
-        }
-        developers {
-            developer {
-                name = "LSPosed"
-                url = "https://lsposed.org"
+            developers {
+                developer {
+                    name.set("Pulkit Bhanot")
+                    url.set("https://github.com/pb7labs")
+                }
             }
-        }
-        scm {
-            connection = "scm:git:https://github.com/LSPosed/LSParanoid.git"
-            url = "https://github.com/LSPosed/LSParanoid"
+            scm {
+                connection.set("scm:git:https://github.com/pb7labs/LSParanoid.git")
+                url.set("https://github.com/pb7labs/LSParanoid")
+            }
         }
     }
 }

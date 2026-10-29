@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("org.lsposed.lsparanoid")
+    id("io.github.pb7labs.lsparanoid")
 }
 
 lsparanoid {
@@ -10,7 +10,7 @@ lsparanoid {
 
 android {
     namespace = "org.lsposed.paranoid.samples.application"
-    compileSdk = 33
+    compileSdk = 35
     defaultConfig {
         applicationId = "org.lsposed.paranoid.samples.application"
         minSdk = 24
@@ -26,7 +26,7 @@ android {
 }
 dependencies {
     compileOnly("androidx.annotation:annotation:1.5.0")
-    implementation(project(":samples:library"))
-    implementation(project(":samples:library-obfuscate"))
-    implementation(project(":samples:library-may-obfuscate"))
+    implementation(project(":library"))
+    implementation(project(":library-obfuscate"))
+    implementation(project(":library-may-obfuscate"))
 }
