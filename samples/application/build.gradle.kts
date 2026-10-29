@@ -26,7 +26,7 @@ android {
 }
 dependencies {
     compileOnly("androidx.annotation:annotation:1.5.0")
-    implementation(project(":samples:library"))
-    implementation(project(":samples:library-obfuscate"))
-    implementation(project(":samples:library-may-obfuscate"))
+    implementation(project(":library"))
+    implementation(project(":library-obfuscate"))
+    implementation(project(":library-may-obfuscate"))
 }

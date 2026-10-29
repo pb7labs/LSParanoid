@@ -30,10 +30,7 @@ rootProject.name = "LSParanoid"
 include(
     ":core",
     ":processor",
-    ":gradle-plugin",
-    ":samples:application",
-    ":samples:application-global-obfuscate",
-    ":samples:library",
-    ":samples:library-may-obfuscate",
-    ":samples:library-obfuscate"
+    ":gradle-plugin"
 )
+
+includeBuild("samples")
