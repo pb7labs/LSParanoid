@@ -73,7 +73,7 @@ class LSParanoidPlugin : Plugin<Project> {
     private fun Project.addDependencies() {
         val version = Build.VERSION
         val configurationName = JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME
-        dependencies.add(configurationName, "org.lsposed.lsparanoid:core:$version")
+        dependencies.add(configurationName, "io.github.pb7labs:core:$version")
     }
 
     private companion object {

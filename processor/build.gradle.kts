@@ -13,7 +13,7 @@ dependencies {
 }
 
 publish {
-    githubRepo = "LSPosed/LSParanoid"
+    githubRepo = "pb7labs/LSParanoid"
     publications {
         register<MavenPublication>(rootProject.name) {
             artifactId = project.name
@@ -23,22 +23,22 @@ publish {
             pom {
                 name = project.name
                 description = "String obfuscator for Android applications"
-                url = "https://github.com/LSPosed/LSParanoid"
+                url = "https://github.com/pb7labs/LSParanoid"
                 licenses {
                     license {
                         name = "Apache License 2.0"
-                        url = "https://github.com/LSPosed/LSParanoid/blob/master/LICENSE.txt"
+                        url = "https://github.com/pb7labs/LSParanoid/blob/master/LICENSE.txt"
                     }
                 }
                 developers {
                     developer {
-                        name = "LSPosed"
-                        url = "https://lsposed.org"
+                        name = "Pulkit Bhanot"
+                        url = "https://github.com/pb7labs"
                     }
                 }
                 scm {
-                    connection = "scm:git:https://github.com/LSPosed/LSParanoid.git"
-                    url = "https://github.com/LSPosed/LSParanoid"
+                    connection = "scm:git:https://github.com/pb7labs/LSParanoid.git"
+                    url = "https://github.com/pb7labs/LSParanoid"
                 }
             }
         }

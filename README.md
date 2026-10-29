@@ -1,5 +1,4 @@
-[![Build](https://github.com/LSPosed/LSParanoid/actions/workflows/build.yml/badge.svg)](https://github.com/LSPosed/LSParanoid/actions/workflows/build.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/org.lsposed.lsparanoid/org.lsposed.lsparanoid.gradle.plugin)](https://central.sonatype.com/namespace/org.lsposed.lsparanoid)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.pb7labs.lsparanoid/io.github.pb7labs.lsparanoid.gradle.plugin)](https://central.sonatype.com/namespace/io.github.pb7labs)
 
 LSParanoid
 ========
@@ -18,7 +17,7 @@ pluginManagement {
     mavenCentral()
   }
   plugins {
-    id("org.lsposed.lsparanoid") version "......"
+    id("io.github.pb7labs.lsparanoid") version "0.6.1"
   }
 }
 ```
@@ -49,7 +48,7 @@ Paranoid plugin can be configured using `lsparanoid` extension object.
 The following is an example `build.gradle.kts` that configures `lsparanoid` extension object with default values.
 ```kotlin
 plugins {
-    id("org.lsposed.lsparanoid")
+    id("io.github.pb7labs.lsparanoid")
     // other plugins...
 }
 
