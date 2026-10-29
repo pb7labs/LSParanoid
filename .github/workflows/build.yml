@@ -39,7 +39,8 @@ jobs:
         shell: bash
         run: perl -pi -e 's/gradle-[0-9.]+-bin/gradle-${{ matrix.gradle }}-bin/' gradle/wrapper/gradle-wrapper.properties
       - name: Build with Gradle
-        run: ./gradlew publishToMavenLocal -PagpVersion=${{ matrix.agp }}
+        shell: bash
+        run: ./gradlew publishToMavenLocal "-PagpVersion=${{ matrix.agp }}"
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}
@@ -50,12 +51,14 @@ jobs:
           path: ~/.m2
           include-hidden-files: true
       - name: Build samples
+        shell: bash
         run: |
-          ./gradlew :samples:application:assembleRelease :samples:application-global-obfuscate:assembleRelease :samples:library:assembleRelease :samples:library-may-obfuscate:assembleRelease :samples:library-obfuscate:assembleRelease -PagpVersion=${{ matrix.agp }} --configuration-cache
+          ./gradlew :application:assembleRelease :application-global-obfuscate:assembleRelease :library:assembleRelease :library-may-obfuscate:assembleRelease :library-obfuscate:assembleRelease "-PagpVersion=${{ matrix.agp }}" --configuration-cache
       - name: Upload samples
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-agp${{ matrix.agp }}-samples
           path: samples/*/build/outputs
       - name: Stop Gradle
+        shell: bash
         run: ./gradlew --stop

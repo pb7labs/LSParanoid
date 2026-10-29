@@ -23,6 +23,14 @@ pluginManagement {
     }
 }
 
+includeBuild("..") {
+    dependencySubstitution {
+        substitute(module("io.github.pb7labs:core")).using(project(":core"))
+        substitute(module("io.github.pb7labs:processor")).using(project(":processor"))
+        substitute(module("io.github.pb7labs:gradle-plugin")).using(project(":gradle-plugin"))
+    }
+}
+
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
@@ -36,7 +44,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LSParanoid-Samples"
+rootProject.name = "samples"
 
 include(
     ":application",
