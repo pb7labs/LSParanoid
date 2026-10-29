@@ -53,7 +53,7 @@ jobs:
       - name: Build samples
         shell: bash
         run: |
-          ./gradlew :application:assembleRelease :application-global-obfuscate:assembleRelease :library:assembleRelease :library-may-obfuscate:assembleRelease :library-obfuscate:assembleRelease "-PagpVersion=${{ matrix.agp }}" --configuration-cache
+          ./gradlew -p samples :application:assembleRelease :application-global-obfuscate:assembleRelease :library:assembleRelease :library-may-obfuscate:assembleRelease :library-obfuscate:assembleRelease "-PagpVersion=${{ matrix.agp }}" --configuration-cache
       - name: Upload samples
         uses: actions/upload-artifact@v4
         with:
